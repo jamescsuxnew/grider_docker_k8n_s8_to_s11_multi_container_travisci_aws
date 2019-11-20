@@ -4,25 +4,25 @@ services:
   - docker
 
 before_install:
-  - docker build -t jcsux/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t jcsuxnew/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true jcsux/react-test npm test
+  - docker run -e CI=true jcsuxnew/react-test npm test
 
 after_success:
-  - docker build -t jcsux/multi-client ./client
-  - docker build -t jcsux/multi-nginx ./nginx
-  - docker build -t jcsux/multi-server ./server
-  - docker build -t jcsux/multi-worker ./worker
+  - docker build -t jcsuxnew/multi-client ./client
+  - docker build -t jcsuxnew/multi-nginx ./nginx
+  - docker build -t jcsuxnew/multi-server ./server
+  - docker build -t jcsuxnew/multi-worker ./worker
 
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
   # Take those images and push them to docker hub
-  - docker push jcsux/multi-client
-  - docker push jcsux/multi-nginx
-  - docker push jcsux/multi-server
-  - docker push jcsux/multi-worker
+  - docker push jcsuxnew/multi-client
+  - docker push jcsuxnew/multi-nginx
+  - docker push jcsuxnew/multi-server
+  - docker push jcsuxnew/multi-worker
 
 # deploy:
 #   edge: true
