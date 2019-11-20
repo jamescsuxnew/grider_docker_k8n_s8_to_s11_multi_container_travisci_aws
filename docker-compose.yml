@@ -18,6 +18,8 @@ services:
     volumes:
       - /app/node_modules
       - ./server:/app
+    depends_on:
+    - postgres
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379

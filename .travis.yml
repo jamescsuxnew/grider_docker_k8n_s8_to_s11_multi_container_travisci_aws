@@ -1,0 +1,39 @@
+
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t jcsux/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true USERNAME/react-test npm test
+
+after_success:
+  - docker build -t jcsux/multi-client ./client
+  - docker build -t jcsux/multi-nginx ./nginx
+  - docker build -t jcsux/multi-server ./server
+  - docker build -t jcsux/multi-worker ./worker
+
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  # Take those images and push them to docker hub
+  - docker push jcsux/multi-client
+  - docker push jcsux/multi-nginx
+  - docker push jcsux/multi-server
+  - docker push jcsux/multi-worker
+
+# deploy:
+#   edge: true
+#   provider: elasticbeanstalk
+#   region: "us-east-1"
+#   app: "grider_s7_travisci_aws"
+#   env: "GriderS7TravisciAws-env-1"
+#   bucket_name: "elasticbeanstalk-us-east-1-717509116558"
+#   bucket_path: "grider_s7_travisci_aws"
+#   on:
+#     branch: master
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key: 
+#     secure: "$AWS_SECRET_KEY"
